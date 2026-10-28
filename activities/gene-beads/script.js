@@ -1,3 +1,25 @@
+let act1Completed = false; // 활동 1 팝업 중복 방지
+let act2InsightShown = false; // 활동 2 팝업 중복 방지
+
+// 팝업 열기/닫기 함수
+function showModal(icon, title, desc, actionHtml) {
+  document.getElementById('modal-icon').textContent = icon;
+  document.getElementById('modal-title').textContent = title;
+  document.getElementById('modal-desc').innerHTML = desc;
+  document.getElementById('modal-action').innerHTML = actionHtml;
+  document.getElementById('custom-modal').classList.add('show');
+}
+function hideModal() {
+  document.getElementById('custom-modal').classList.remove('show');
+}
+// 다음 단계 열기
+function unlockActivity2() {
+  hideModal();
+  const act2Card = document.getElementById('activity-2-card');
+  act2Card.style.display = 'block';
+  setTimeout(() => { act2Card.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 150);
+}
+
 const BEADS = {
   star: { id: 'star', name: '노란 별 구슬', color: '#f59e0b', codes: ['AUG'] },
   circle: { id: 'circle', name: '파란 원형 구슬', color: '#3b82f6', codes: ['GAA', 'GAG'] },
@@ -67,17 +89,21 @@ function renderSlicer() {
   const statusEl = document.getElementById('slice-status');
 
   if (isAllCorrect) {
-    // 성공 시 축하 메시지와 다음 단계 버튼 출력
-    statusEl.innerHTML = `
-      <div style="color:var(--success); font-size: 15px; margin-bottom: 12px;">✅ 완벽합니다! 15개의 글자가 3글자씩 정확히 나뉘었습니다.</div>
-      <button class="btn" onclick="unlockActivity2()" style="padding: 10px 24px; font-size: 15px; transform: scale(1.05); transition: transform 0.2s;">활동 2 시작하기 ✨</button>
-    `;
+    statusEl.innerHTML = `<span style="color:var(--success); font-weight:700;">✅ 칸막이 나누기 완료!</span>`;
+    if (!act1Completed) {
+      act1Completed = true; // 최초 1회만 팝업 실행
+      showModal(
+        '🎉', 
+        '완벽합니다!', 
+        '15개의 글자가 3글자씩 5묶음(AUG / GAA / CUU / CCU / GAG)으로 정확히 나뉘었습니다.', 
+        `<button class="btn" onclick="unlockActivity2()">활동 2 시작하기 ✨</button>`
+      );
+    }
   } else {
-    // 오답 상태이거나 칸막이를 뺐을 때는 버튼을 숨기고 활동 2도 다시 가림
+    act1Completed = false;
     statusEl.textContent = `현재 나눈 칸막이: ${sliceCuts.size}개 (목표: 3글자씩 4개의 칸막이로 나누기)`;
     document.getElementById('activity-2-card').style.display = 'none';
   }
-}
 
 // 다음 단계 열기 및 부드러운 스크롤 함수 추가
 function unlockActivity2() {
@@ -166,10 +192,19 @@ function renderPracticeWire() {
     wire.appendChild(unit);
   });
 
-  const insight = document.getElementById('duplicate-insight');
-  if (practiceSlots[1] === 'circle' && practiceSlots[4] === 'circle') insight.classList.add('show');
-  else insight.classList.remove('show');
-}
+  if (practiceSlots[1] === 'circle' && practiceSlots[4] === 'circle') {
+    if (!act2InsightShown) {
+      act2InsightShown = true; // 최초 1회만 팝업 실행
+      showModal(
+        '💡', 
+        '발견 포인트!', 
+        '2번째(<code>GAA</code>)와 5번째(<code>GAG</code>)는 글자 조합이 다르지만, 둘 다 똑같은 <strong>파란 원형 구슬(●)</strong>을 지정합니다!', 
+        `<button class="btn" onclick="hideModal()">확인</button>`
+      );
+    }
+  } else {
+    act2InsightShown = false;
+  }
 
 function tryPlacePracticeBead(slotIdx, beadId, slotEl) {
   if (beadId === CODE_TO_BEAD[practiceTriplets[slotIdx]]) {
