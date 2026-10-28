@@ -67,13 +67,31 @@ function renderSlicer() {
   const statusEl = document.getElementById('slice-status');
 
   if (isAllCorrect) {
-    statusEl.innerHTML = `<span style="color:var(--success);">✅ 완벽합니다! 15개의 글자가 3글자씩 5묶음(AUG / GAA / CUU / CCU / GAG)으로 정확히 나뉘었습니다.</span>`;
+    // 성공 시 축하 메시지와 다음 단계 버튼 출력
+    statusEl.innerHTML = `
+      <div style="color:var(--success); font-size: 15px; margin-bottom: 12px;">✅ 완벽합니다! 15개의 글자가 3글자씩 정확히 나뉘었습니다.</div>
+      <button class="btn" onclick="unlockActivity2()" style="padding: 10px 24px; font-size: 15px; transform: scale(1.05); transition: transform 0.2s;">활동 2 시작하기 ✨</button>
+    `;
   } else {
+    // 오답 상태이거나 칸막이를 뺐을 때는 버튼을 숨기고 활동 2도 다시 가림
     statusEl.textContent = `현재 나눈 칸막이: ${sliceCuts.size}개 (목표: 3글자씩 4개의 칸막이로 나누기)`;
+    document.getElementById('activity-2-card').style.display = 'none';
   }
 }
 
+// 다음 단계 열기 및 부드러운 스크롤 함수 추가
+function unlockActivity2() {
+  const act2Card = document.getElementById('activity-2-card');
+  act2Card.style.display = 'block'; // 숨겨진 활동 2 표시
+  
+  // 카드가 나타난 후 해당 위치로 부드럽게 스크롤 이동
+  setTimeout(() => {
+    act2Card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
+}
+
 function autoSlicePractice() {
+// ... 이하 동일
   sliceCuts = new Set([2, 5, 8, 11]);
   renderSlicer();
 }
