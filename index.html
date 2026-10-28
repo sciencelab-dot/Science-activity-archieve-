@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Science Activity Archive</title>
+  <link rel="stylesheet" href="./css/common.css">
+</head>
+<body>
+
+  <!-- 메인 헤더 -->
+  <header class="archive-header">
+    <h1>Science Activity Archive</h1>
+    <p>통합과학 및 생명과학 탐구 활동 보관소</p>
+  </header>
+
+  <!-- 카테고리 필터 & 카드 리스트 -->
+  <main class="archive-container">
+    <nav class="filter-bar" id="filter-bar">
+      <button class="filter-btn active" data-category="all">전체보기</button>
+      <button class="filter-btn" data-category="물리학">물리학</button>
+      <button class="filter-btn" data-category="화학">화학</button>
+      <button class="filter-btn" data-category="생명과학">생명과학</button>
+      <button class="filter-btn" data-category="지구과학">지구과학</button>
+    </nav>
+
+    <section class="archive-grid" id="archive-grid">
+      <!-- js/main.js 에서 카드가 자동 생성됩니다 -->
+    </section>
+  </main>
+
+  <script src="./js/main.js"></script>
+</body>
+</html>
