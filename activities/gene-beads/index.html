@@ -63,16 +63,6 @@
           <div>
             <div class="thread-board">
               <div class="thread-guide">3글자 묶음마다 지정된 모양 구슬을 하나씩 끼워 사슬을 완성하세요</div>
-              <div class="wire-track" id="practice-wire">
-                <div class="wire-line"></div>
-              </div>
-              <div id="duplicate-insight" class="insight-banner">
-                <span>💡</span>
-                <div>
-                  <strong>발견 포인트!</strong> 2번째(<code>GAA</code>)와 5번째(<code>GAG</code>)는 글자 조합이 서로 다르지만, 둘 다 똑같은 <strong>파란 원형 구슬(●)</strong>을 지정합니다!
-                </div>
-              </div>
-            </div>
 
             <div class="palette-tray">
               <div class="palette-title">🎨 모양 구슬 상자 (마우스로 드래그해서 위 빈칸에 넣으세요)</div>
@@ -165,6 +155,17 @@
         </div>
       </div>
     </section>
+  </div>
+  </div> <!-- container 끝 -->
+
+  <!-- 팝업(모달) 공통 UI 추가 -->
+  <div id="custom-modal" class="modal-overlay">
+    <div class="modal-box">
+      <div id="modal-icon" class="modal-icon">✅</div>
+      <h3 id="modal-title" class="modal-title">성공!</h3>
+      <p id="modal-desc" class="modal-desc">내용이 들어갑니다.</p>
+      <div id="modal-action" class="modal-action"></div>
+    </div>
   </div>
 
   <script src="./script.js"></script>
