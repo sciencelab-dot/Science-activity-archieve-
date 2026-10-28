@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>유전 정보의 흐름: 3글자 암호와 구슬 꿰기</title>
+  <!-- 1. 고정 공통 스타일 로드 -->
+  <link rel="stylesheet" href="../../css/common.css">
+  <!-- 2. 현재 활동 전용 스타일 로드 -->
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+  <header class="activity-topbar">
+    <div class="topbar-left">
+      <a href="../../index.html" class="back-link">← 보관소 목록</a>
+      <span class="badge-curriculum">2022 개정 통합과학</span>
+      <h1 class="activity-title">유전 정보의 흐름: 3글자 암호와 구슬 꿰기</h1>
+    </div>
+    <div class="nav-tabs">
+      <button class="tab-btn active" onclick="switchStage(1)">1단계 · 연습 (3글자 끊기 & 구슬 꿰기)</button>
+      <button class="tab-btn" onclick="switchStage(2)">2단계 · 실전 (유전자 서열과 단백질 꼬임)</button>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- STAGE 1: 연습 단계 -->
+    <section id="stage-1" class="stage active">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <span class="step-tag">활동 1</span>
+            <h2 class="card-title">연속된 글자를 3개씩 나누기</h2>
+            <p class="card-desc">전사된 글자(염기) 사슬에서 글자와 글자 사이를 클릭해 <strong>3글자씩</strong> 칸막이를 나눠보세요.</p>
+          </div>
+          <button class="btn btn-outline" onclick="autoSlicePractice()">3글자씩 자동 나누기</button>
+        </div>
+
+        <div class="slicer-box">
+          <div class="slicer-guide">👇 글자 사이의 점선을 클릭하여 3글자씩 끊어 주세요</div>
+          <div id="letter-stream" class="letter-stream"></div>
+          <div id="slice-status" class="slice-status">현재 나눠진 칸막이: 0 / 4개</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <span class="step-tag">활동 2</span>
+            <h2 class="card-title">암호 해독표를 보고 모양 구슬 끼우기</h2>
+            <p class="card-desc">아래 <strong>구슬 상자</strong>에서 알맞은 모양의 구슬을 마우스로 드래그하여 빈칸에 끼워 넣으세요. (클릭 후 빈칸 클릭도 가능)</p>
+          </div>
+          <button class="btn btn-outline" onclick="resetPracticeBeads()">초기화</button>
+        </div>
+
+        <div class="workspace-grid">
+          <div>
+            <h3 class="sub-heading">📖 3글자 구슬 암호 해독표</h3>
+            <div class="decoder-list" id="decoder-list"></div>
+          </div>
+
+          <div>
+            <div class="thread-board">
+              <div class="thread-guide">3글자 묶음마다 지정된 모양 구슬을 하나씩 끼워 사슬을 완성하세요</div>
+              <div class="wire-track" id="practice-wire">
+                <div class="wire-line"></div>
+              </div>
+              <div id="duplicate-insight" class="insight-banner">
+                <span>💡</span>
+                <div>
+                  <strong>발견 포인트!</strong> 2번째(<code>GAA</code>)와 5번째(<code>GAG</code>)는 글자 조합이 서로 다르지만, 둘 다 똑같은 <strong>파란 원형 구슬(●)</strong>을 지정합니다!
+                </div>
+              </div>
+            </div>
+
+            <div class="palette-tray">
+              <div class="palette-title">🎨 모양 구슬 상자 (마우스로 드래그해서 위 빈칸에 넣으세요)</div>
+              <div class="bead-list" id="practice-palette"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STAGE 2: 실전 단계 -->
+    <section id="stage-2" class="stage">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <span class="step-tag">실전 활동</span>
+            <h2 class="card-title">유전자 염기서열에 따른 구슬 조합과 단백질 꼬임 비교</h2>
+            <p class="card-desc">짧은 유전자 구간(15글자)을 선택하고 구슬을 직접 꿰어보세요. 끼워진 구슬의 모양에 따라 사슬이 <strong>접히고 꼬이는 입체 형태</strong>가 어떻게 달라지는지 확인할 수 있습니다.</p>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <button class="btn btn-outline" onclick="autoFillPracticalBeads()">구슬 자동 끼우기</button>
+            <button class="btn btn-outline" onclick="resetPracticalBeads()">비우기</button>
+          </div>
+        </div>
+
+        <div class="gene-selector">
+          <button class="gene-card-btn active" id="gene-btn-normal" onclick="selectGeneCase('normal')">
+            <h4>유전자 구간 A (기준 서열)</h4>
+            <p>정상적인 고리 모양으로 둥글게 접히는 기준 서열입니다.</p>
+          </button>
+          <button class="gene-card-btn" id="gene-btn-same" onclick="selectGeneCase('same')">
+            <h4>유전자 구간 B (6번째 글자 변화: T→C)</h4>
+            <p>글자가 바뀌었지만 같은 모양의 구슬이 끼워지는 경우입니다.</p>
+          </button>
+          <button class="gene-card-btn" id="gene-btn-diff" onclick="selectGeneCase('diff')">
+            <h4>유전자 구간 C (8번째 글자 변화: A→T)</h4>
+            <p>가운데 끼워지는 구슬의 모양이 바뀌어 꺾이는 각도가 달라지는 경우입니다.</p>
+          </button>
+        </div>
+
+        <div class="dna-rna-box">
+          <div class="strand-row">
+            <span class="strand-badge">DNA 염기서열</span>
+            <div id="dna-display" class="triplet-wrap"></div>
+          </div>
+          <div class="strand-row">
+            <span class="strand-badge">전사된 3글자</span>
+            <div id="rna-display" class="triplet-wrap"></div>
+          </div>
+        </div>
+
+        <div class="workspace-grid">
+          <div>
+            <h3 class="sub-heading">📖 3글자 구슬 암호 해독표</h3>
+            <div class="decoder-list" id="practical-decoder-list"></div>
+          </div>
+
+          <div>
+            <div class="thread-board" style="min-height:190px; padding:20px;">
+              <div class="wire-track" id="practical-wire">
+                <div class="wire-line"></div>
+              </div>
+            </div>
+
+            <div class="palette-tray">
+              <div class="palette-title">🎨 모양 구슬 상자 (드래그하여 빈칸에 끼우세요)</div>
+              <div class="bead-list" id="practical-palette"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="folding-panel">
+          <div class="canvas-card">
+            <div class="canvas-header">
+              <h4 id="current-fold-title">현재 조립한 단백질의 꼬임 형태</h4>
+              <button class="btn" style="padding:5px 12px; font-size:12px;" onclick="replayFoldAnimation()">🔄 꼬임 과정 다시 보기</button>
+            </div>
+            <canvas id="canvas-current" class="fold-canvas" width="360" height="250"></canvas>
+            <p id="current-fold-desc" class="fold-caption">구슬 5개를 모두 끼우면 구슬 모양의 맞물림에 따라 사슬이 자동으로 휘어지며 입체 구조를 만듭니다.</p>
+          </div>
+
+          <div class="canvas-card">
+            <div class="canvas-header">
+              <h4>기준 단백질(유전자 구간 A)의 꼬임 형태</h4>
+              <span style="font-size:12px; color:var(--text-sub); font-weight:600;">비교 기준</span>
+            </div>
+            <canvas id="canvas-reference" class="fold-canvas" width="360" height="250"></canvas>
+            <p class="fold-caption">가운데 <strong>초록 세모 구슬(▲)</strong>이 사슬을 안쪽으로 모아주어 양 끝의 구슬이 안정적인 고리 형태로 맞물린 모습입니다.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script src="./script.js"></script>
+</body>
+</html>
